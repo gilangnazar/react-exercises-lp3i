@@ -1,7 +1,5 @@
 function Header() {
-    return(
-        <p>Meeting 2 React Js</p>
-    )
+  return <h1>Pilih Menu</h1>;
 }
 
 export default Header;

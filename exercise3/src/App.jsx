@@ -1,3 +1,4 @@
+import DataStudent from './DataStudent';
 import Table from './Table';
 import TableWithDropdown from './TableWithDropdown';
 
@@ -7,6 +8,7 @@ function App() {
       <div className="container">
         {/* <Table/> */}
         <TableWithDropdown />
+        {/* <DataStudent/> */}
       </div>
     </>
   )

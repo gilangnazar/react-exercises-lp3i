@@ -42,11 +42,18 @@ function TableWithDropdown() {
   );
 
   const handleDelete = (index) => {
-    alert(`deleting index ${index}`);
+    const updatedData = data.filter((_, i) => i !== index);
+    setData(updatedData);
   };
 
   const handleEdit = (index) => {
-    alert(`editing index ${index}`);
+    const itemToEdit = data[index];
+    setProductName(itemToEdit.productName);
+    setPrice(itemToEdit.price);
+    setQty(itemToEdit.qty);
+    ref.current.value = listProduct.findIndex(
+      (item) => item.productName === itemToEdit.productName
+    );
   };
 
   return (
@@ -101,6 +108,16 @@ function TableWithDropdown() {
             id="qty"
           />
         </div>
+        <div className="mb-3">
+          <label className="form-label">Amount</label>
+          <input
+            value={price * qty}
+            // onChange={(e) => setQty(e.target.value)}
+            type="number"
+            className="form-control"
+            id="qty"
+          />
+        </div>
         <button type="submit" className="btn btn-primary" onClick={addData}>
           Submit
         </button>
@@ -149,6 +166,11 @@ function TableWithDropdown() {
               </tr>
             );
           })}
+          <tr>
+            <td colSpan={4} style={{fontWeight: 'bold'}}>GrandTotal : </td>
+            <td className='grandtotalcell' style={{backgroundColor: 'lightblue', color: 'black'}}>{amount.toLocaleString('id')}</td>
+            <td></td>
+          </tr>
         </tbody>
       </table>
     </>
