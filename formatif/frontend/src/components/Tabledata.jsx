@@ -41,22 +41,13 @@ export default function Tabledata(props) {
             name: 'Biaya Kuliah',
             selector: row=>row.BiayaKuliah,
             sortable: true
-        },
-        {
-            name: 'Action',
-            cell: row => (
-                <div className="">
-                    <button className="btn btn-warning m-1" >Edit</button>
-                    <button className="btn btn-danger m-1" >Delete</button>
-                </div>
-            )
         }
 
     ]
 
     return (
         <>
-            <h1 className="m-2">List Barang</h1>
+            <h1 className="m-2">List Mahasiswa</h1>
             
             <DataTable
                 columns={cols}
