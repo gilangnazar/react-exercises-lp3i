@@ -3,9 +3,11 @@ import axios from 'axios'
 import Tabledata from './components/Tabledata';
 import Formdata from './components/Formdata';
 
+import {fetchBarang} from './apiService'
+
 function App() {
   const [barang, setBarang] = useState([])
-
+  const [edit, setEdit] = useState(null)
   const [form, setForm] = useState({
     NamaBarang: '',
     Harga: '',
@@ -13,62 +15,18 @@ function App() {
     KodeBarang: '',
   })
 
-  const [edit, setEdit] = useState('')
-  
-  const fetchData = async () => {
+  async function fetchData() {
     try {
-      const res = await axios.get('http://localhost:3000/barang')
-      setBarang(res.data)
+      const data = await fetchBarang()
+      setBarang(data)
     } catch (error) {
-      console.log('err fetch data: ', error)
+      console.log('Error fetching/getting data: ', error)
     }
   }
 
-  function handleInputChange(e){
-    const {name, value} = e.target
-    setForm({...form, [name]:value,})
-  }
-
-  function editData(data){
-    console.log("data to edit: ", data)
-    setEdit(data)
-    setForm({
-      NamaBarang: data.NamaBarang,
-      Harga: data.Harga,
-      Quantity: data.Quantity,
-      KodeBarang: data.KodeBarang,
-    })
-    setEdit(null)
-  }
-
-  async function updateData(e) {
-    e.preventDefault()
-    console.log('update data: ', edit);
-    
-    const {NamaBarang, Harga, Quantity, KodeBarang} = form
-
-    if(!NamaBarang || !Harga || !Quantity || !KodeBarang){
-      return
-    }
-
-    try {
-      await axios.put('http://localhost:3000/editbarang', {KodeBarang, NamaBarang, Harga, Quantity})
-      setEdit({
-        NamaBarang: '',
-        Harga: '',
-        Quantity: '',
-        KodeBarang: '',
-      })
-      fetchData()
-    } catch (error) {
-      console.log("error editData: ", error);
-    }
-  }
-
-  async function submitData(e) {
-    e.preventDefault()
-    console.log('submited data: ', form);
-    
+  // POST /tambahbarang
+  // submiting data into database
+  async function submitData() {
     const {NamaBarang, Harga, Quantity, KodeBarang} = form
 
     if(!NamaBarang || !Harga || !Quantity || !KodeBarang){
@@ -85,29 +43,63 @@ function App() {
       })
       fetchData()
     } catch (error) {
-      console.log("error submitData: ", error);
+      console.log("Error submitting data: ", error);
     }
   }
 
+
+  // PUT /editbarang/:KodeBarang
+  // update existing data into the database
+  async function updateData() {    
+    const {NamaBarang, Harga, Quantity, KodeBarang} = form
+
+    if(!NamaBarang || !Harga || !Quantity || !KodeBarang){
+      return
+    }
+
+    try {
+      await axios.put('http://localhost:3000/editbarang', {KodeBarang, NamaBarang, Harga, Quantity})
+      setForm({
+        NamaBarang: '',
+        Harga: '',
+        Quantity: '',
+        KodeBarang: '',
+      })
+      setEdit(null)
+      fetchData()
+    } catch (error) {
+      console.log("Error updating data: ", error);
+    }
+  }
+
+  // handles
+  // handle which function is used based on the state we use
   async function handleFormSubmit(e) {
     e.preventDefault()
     if(edit) {
-      await updateData(e)
+      await updateData()
     } else {
-      await submitData(e)
+      await submitData()
     }
   }
 
-  async function deleteData(KodeBarang) {
-    try {
-      await axios.delete(`http://localhost:3000/deletebarang/${KodeBarang}`)
-      console.log('deleted:', KodeBarang);
-      fetchData()
-    } catch (error) {
-      console.log('delete error', error)
-    }
+  // handle when click btn edit, displaying the data into the input
+  function handleButtonEdit(data){
+    // console.log("Choosen data to edit: ", data)
+    setEdit(data)
+    setForm({
+      NamaBarang: data.NamaBarang,
+      Harga: data.Harga,
+      Quantity: data.Quantity,
+      KodeBarang: data.KodeBarang,
+    })
   }
 
+  // handle input change when we type in the input 
+  function handleInputChange(e){
+    const {name, value} = e.target
+    setForm({...form, [name]:value,})
+  }
 
   useEffect(() => {
     fetchData()
@@ -117,21 +109,18 @@ function App() {
     <>
     <div className='container mt-5 mb-5'>
       <Formdata 
-        fetchData={fetchData} 
-        handleInputChange={handleInputChange} 
-        handleFormSubmit={handleFormSubmit} 
-        NamaBarang={form.NamaBarang} 
-        Harga={form.Harga} 
-        Quantity={form.Quantity} 
-        KodeBarang={form.KodeBarang}
-        updateData={updateData}
-      />
+        edit={edit}
+        form={form}
+        handleInputChange={handleInputChange}
+        handleFormSubmit={handleFormSubmit}
+        />
 
       <hr />
-      <Tabledata 
+      <Tabledata
         barang={barang}
-        editData={editData}
-        deleteData={deleteData}
+        edit={edit}
+        fetchData={fetchData}
+        handleButtonEdit={handleButtonEdit}
       />
     </div>
     </>

@@ -1,15 +1,16 @@
-export default function Formdata({handleFormSubmit, NamaBarang, Harga, Quantity, KodeBarang, handleInputChange}){
-  console.log('formdata comp render');
+export default function Formdata({edit, form, handleInputChange, handleFormSubmit}){
+
     return(
         <>
-            <h1>Tambah Barang</h1>
+            {/* <h1>Tambah Barang</h1> */}
+            <h1>{edit ? "Edit Data Barang" : "Tambah Barang"}</h1>
             <form className='form' onSubmit={handleFormSubmit}>
               <div>
                 <label htmlFor="NamaBarang" className='form-label'>Nama Barang</label>
                 <input type="text"
                       name='NamaBarang'
                       className='form-control'
-                      value={NamaBarang}
+                      value={form.NamaBarang}
                       onChange={handleInputChange}
                 />
               </div>
@@ -18,7 +19,7 @@ export default function Formdata({handleFormSubmit, NamaBarang, Harga, Quantity,
                 <input type="Number"
                       name='Harga'
                       className='form-control'
-                      value={Harga}
+                      value={form.Harga}
                       onChange={handleInputChange}
                 />
               </div>
@@ -27,20 +28,31 @@ export default function Formdata({handleFormSubmit, NamaBarang, Harga, Quantity,
                 <input type="Number"
                       name='Quantity'
                       className='form-control'
-                      value={Quantity}
+                      value={form.Quantity}
                       onChange={handleInputChange}
                 />
               </div>
               <div>
                 <label htmlFor="KodeBarang" className='form-label'>Kode Barang</label>
-                <input type="text"
-                      name='KodeBarang'
-                      className='form-control'
-                      value={KodeBarang}
-                      onChange={handleInputChange}
-                />
+                {edit ? (
+                  <input type="text"
+                        name='KodeBarang'
+                        className='form-control'
+                        value={form.KodeBarang}
+                        onChange={handleInputChange}
+                        disabled
+                  />
+                ) : 
+                (
+                  <input type="text"
+                        name='KodeBarang'
+                        className='form-control'
+                        value={form.KodeBarang}
+                        onChange={handleInputChange}
+                  />
+                )}
               </div>
-              <button className='btn btn-primary mt-1' type='submit' onClick={() => console.log('click submit')}>Submit</button>
+              <button className='btn btn-primary mt-1' type='submit'>{edit ? "Edit data" : "Submit Data"}</button>
             </form>
         </>
     )
