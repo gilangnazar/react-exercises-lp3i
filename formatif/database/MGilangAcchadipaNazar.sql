@@ -1,5 +1,5 @@
-CREATE DATABASE perkuliahan;
-USE perkuliahan;
+CREATE DATABASE MGilangAcchadipaNazar;
+USE MGilangAcchadipaNazar;
 
 
 CREATE TABLE `jurusan` (
